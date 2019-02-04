@@ -1,0 +1,117 @@
+assignments, feb 5 , 2019
+--sandya.nandakumar@accenture.com
+
+
+1.) using regex print the value inside the qoutes:
+
+import re
+st1=''
+st='This iss a "ABC"'
+r=re.search('\"\w+\"',st)
+val=r.group(0)
+print re.sub('(\")(\w+)(\"$)',r'\2',val)
+
+
+or   
+
+
+import re
+st='this is my home town "chennai"'
+re1=re.search("[\"]+\w+[\"]",st)
+val=re1.group(0)
+st3=""
+for i in val:
+    if i=='"':
+        pass
+    else:
+        st3=st3+i
+print(st3)
+
+
+2.) email validation:
+
+import re
+def isValidateEmail(email):
+    if len(email)>7:
+        if re.match("[^@]+@[^@]+\.[^@]+",email):
+            print("valid email")
+        else:
+            print("not a valid email")
+email=raw_input("enter a email: ")
+isValidateEmail(email)
+
+
+or
+
+
+import re
+val=raw_input("Enter your Email Id: ")
+def isValidEmail(email):
+     if len(email) > 7:
+         if re.match(r"\b[A-Za-z0-9.]+@[A-Za-z0-9]+\.[A-Za-z]{2,3}", email) != None:
+             return True
+         else:
+             return False
+if isValidEmail(val) == True :
+    print "This is a valid email address"
+else:
+    print "This is not a valid email address"
+    
+
+
+
+3.) printing the schema name and db name:
+
+import re
+schemaname=[]
+temp=[]
+dbname=[]
+str1="provider data is in ccw_view_INT.Prov.Provider address data is in ccw_view_sys.Prov_Address"
+res=re.split(r"[\.]*[\.]",str1)
+print(res)
+for i in range(len(res)):
+    if(i%2!=0):
+        dbname.append(res[i])
+    else:
+        temp=re.split(" ",res[i])
+        schemaname.append(temp[-1])
+print schemaname
+print dbname 
+
+
+
+4.)
+
+inserting values from csv file to query:
+
+import csv
+import sqlite3
+conn=sqlite3.connect("csvreader.db")
+cur=conn.cursor()
+cur.execute("create table stud(id int,name varchar(30),age int,salary int)")
+conn.commit()
+
+csvfile=open('namelist.csv','r')
+creader=csv.reader(csvfile,delimiter=',')
+
+for i in creader:
+    cur.execute("insert into emp values ({},{},{}.format(x,y,z));",i)
+
+cur.execute("select * from stud")
+res=cur.fetchall()
+
+for i in res:
+    print(i)
+
+csvfile.close()
+conn.commit()
+conn.close() 
+ 
+
+ 
+ 
+ 
+ 
+
+
+
