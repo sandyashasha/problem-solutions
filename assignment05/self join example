@@ -1,0 +1,125 @@
+dated: 13/02/2018
+--sandya.nandakumar@accenture.com--
+
+
+
+
+self join:
+----------
+
+mysql> create table cus(cusid int primary key,name varchar(10),city varchar(10));
+Query OK, 0 rows affected (0.84 sec)
+
+mysql> insert into cus values(1,"aaa","los angles");
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into cus values(2,"bb","kajakastan");
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into cus values(3,"ccc","sydney");
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into cus values(4,"eee","sydney");
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into cus values(5,"ddd","los angles");
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into cus values(6,"hhh","chennai");
+Query OK, 1 row affected (0.16 sec)
+
+mysql> select * from cus;
++-------+------+------------+
+| cusid | name | city       |
++-------+------+------------+
+|     1 | aaa  | los angles |
+|     2 | bb   | kajakastan |
+|     3 | ccc  | sydney     |
+|     4 | eee  | sydney     |
+|     5 | ddd  | los angles |
+|     6 | hhh  | chennai    |
++-------+------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select c.name,c.city from cus c join cus c1 on c.cusid!=c1.cusid where c.city=c1.city;
++------+------------+
+| name | city       |
++------+------------+
+| ddd  | los angles |
+| eee  | sydney     |
+| ccc  | sydney     |
+| aaa  | los angles |
++------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,c.city from cus c join cus c1 on c.city=c1.city;
++------+------------+
+| name | city       |
++------+------------+
+| aaa  | los angles |
+| ddd  | los angles |
+| bb   | kajakastan |
+| ccc  | sydney     |
+| eee  | sydney     |
+| ccc  | sydney     |
+| eee  | sydney     |
+| aaa  | los angles |
+| ddd  | los angles |
+| hhh  | chennai    |
++------+------------+
+10 rows in set (0.00 sec)
+
+mysql> select c.name,c.city from cus c join cus c1 on c.city=c1.city group by c1.city;
++------+------------+
+| name | city       |
++------+------------+
+| aaa  | los angles |
+| bb   | kajakastan |
+| ccc  | sydney     |
+| hhh  | chennai    |
++------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,c.city from cus c join cus c1 on c.cusid!=c1.cusid where c.city=c1.city;
++------+------------+
+| name | city       |
++------+------------+
+| ddd  | los angles |
+| eee  | sydney     |
+| ccc  | sydney     |
+| aaa  | los angles |
++------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,c.city from cus c join cus c1 on c.cusid!=c1.cusid and c.city=c1.city;
++------+------------+
+| name | city       |
++------+------------+
+| ddd  | los angles |
+| eee  | sydney     |
+| ccc  | sydney     |
+| aaa  | los angles |
++------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,c.city,count(c.name) from cus c join cus c1 on c.cusid!=c1.cusid and c.city=c1.city group by c1.city;
++------+------------+---------------+
+| name | city       | count(c.name) |
++------+------------+---------------+
+| ddd  | los angles |             2 |
+| eee  | sydney     |             2 |
++------+------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> select cusid,city from cus;
++-------+------------+
+| cusid | city       |
++-------+------------+
+|     1 | los angles |
+|     2 | kajakastan |
+|     3 | sydney     |
+|     4 | sydney     |
+|     5 | los angles |
+|     6 | chennai    |
++-------+------------+
+6 rows in set (0.00 sec)
