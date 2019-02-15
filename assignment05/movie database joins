@@ -1,0 +1,155 @@
+dated: 13/02/2018
+--sandya.nandakumar@accenture.com
+
+mysql> use sathyam
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_sathyam |
++-------------------+
+| booking           |
+| customer          |
+| movie             |
+| screen            |
++-------------------+
+4 rows in set (0.05 sec)
+
+mysql> select * from booking;
++------+--------+------+------+-------------+------------+-----------+
+| b_id | mov_id | s_id | cid  | no_of_seats | show_date  | show_time |
++------+--------+------+------+-------------+------------+-----------+
+|    1 | 105    | s1   | c1   |           2 | 2019-02-14 | 14:30:00  |
+|    2 | 108    | s4   | c2   |           4 | 2019-02-15 | 10:30:00  |
+|    3 | 124    | s2   | c3   |           4 | 2019-02-15 | 10:30:00  |
+|    4 | 122    | s1   | c2   |           3 | 2019-02-14 | 21:00:00  |
++------+--------+------+------+-------------+------------+-----------+
+4 rows in set (0.10 sec)
+
+mysql> select * from customer;
++------+--------+-------------------+------+
+| cid  | cname  | email             | age  |
++------+--------+-------------------+------+
+| c1   | sam    | sam@gmail.com     |   25 |
+| c2   | olivia | olivia@gmail.com  |   28 |
+| c3   | finch  | finch@yahoo.com   |   50 |
+| c4   | peter  | peter@yahoo.com   |   30 |
+| c5   | trump  | trump@gmail.com   |   60 |
+| c6   | nmodi  | namo@gmail.com    |   60 |
+| c7   | rdj    | ironman@gmail.com |   56 |
++------+--------+-------------------+------+
+7 rows in set (0.15 sec)
+
+mysql> select * from screen;
++------+--------+--------+-----------+-----------+-------+
+| s_id | s_name | mov_id | s_type    | show_time | price |
++------+--------+--------+-----------+-----------+-------+
+| s1   | blush  |    105 | lounge    | 14:30:00  |   180 |
+| s2   | weave  |    105 | exclusive | 14:45:00  |   220 |
+| s3   | spot   |    106 | lounge    | 19:30:00  |   180 |
+| s4   | blush  |    107 | lounge    | 19:30:00  |   180 |
+| s1   | blush  |    122 | lounge    | 21:00:00  |   180 |
+| s4   | plush  |    108 | lounge    | 22:30:00  |   180 |
+| s3   | spot   |    106 | lounge    | 14:30:00  |   180 |
+| s3   | spot   |    106 | lounge    | 13:30:00  |   180 |
+| s2   | weave  |    124 | exclusive | 10:30:00  |   220 |
+| s2   | weave  |    123 | exclusive | 19:30:00  |   220 |
++------+--------+--------+-----------+-----------+-------+
+10 rows in set (0.05 sec)
+
+mysql> select * from movie;
++--------+------------+-----------+--------------+---------------+------------+
+| mov_id | mov_title  | mov_lang  | mov_rel_date | certification | mov_date   |
++--------+------------+-----------+--------------+---------------+------------+
+|    105 | URI        | HINDI     | 2019-01-04   | U             | 2019-02-14 |
+|    106 | DEV        | TAMIL     | 2019-02-14   | U/A           | 2019-02-14 |
+|    107 | 2.0        | TAMIL     | 2018-12-12   | U/A           | 2019-02-15 |
+|    108 | 2.0        | TELUGU    | 2018-12-12   | U/A           | 2019-02-14 |
+|    109 | PETTAI     | TAMIL     | 2018-01-14   | U             | 2019-02-15 |
+|    110 | AMAVAS     | HINDI     | 2019-01-14   | U/A           | 2019-02-14 |
+|    111 | ORADARLUV  | MALAYALAM | 2019-02-14   | U/A           | 2019-02-15 |
+|    121 | URI        | HINDI     | 2019-02-15   | U/A           | 2019-02-14 |
+|    122 | YATRA      | TELUGU    | 2019-01-04   | U             | 2019-02-15 |
+|    123 | ESCAPEROOM | ENGLISH   | 2019-02-14   | A             | 2019-02-14 |
+|    124 | GULLYBOY   | HINDI     | 2019-02-15   | U/A           | 2019-02-14 |
+|    125 | PERANBU    | TAMIL     | 2019-02-07   | U/A           | 2019-02-15 |
++--------+------------+-----------+--------------+---------------+------------+
+12 rows in set (0.06 sec)
+
+
+1.) what movies id=c2 have watched or name= olivia:
+..................................................
+
+mysql>mysql> select m.mov_title from movie m join booking b on m.mov_id=b.mov_id join customer c on c.cid=b.cid where c.cid="c2";
++-----------+
+| mov_title |
++-----------+
+| 2.0       |
+| YATRA     |
++-----------+
+2 rows in set (0.04 sec)
+
+
+
+2.) movies no one have watched:
+    ............................
+
+mysql> select m.mov_title from movie m left join booking b on m.mov_id=b.mov_id where b.cid is NULL;
++------------+
+| mov_title  |
++------------+
+| DEV        |
+| 2.0        |
+| PETTAI     |
+| AMAVAS     |
+| ORADARLUV  |
+| URI        |
+| ESCAPEROOM |
+| PERANBU    |
++------------+
+8 rows in set (0.00 sec)
+
+
+
+3.) movies watched by customers:
+................................
+
+mysql> select m.mov_title from movie m left join booking b on m.mov_id=b.mov_id where b.cid is not NULL;
++-----------+
+| mov_title |
++-----------+
+| URI       |
+| 2.0       |
+| GULLYBOY  |
+| YATRA     |
++-----------+
+4 rows in set (0.00 sec)
+
+
+or:
+
+mysql>  select m.mov_title from movie m right join booking b on m.mov_id=b.mov_id where b.cid is not NULL;
++-----------+
+| mov_title |
++-----------+
+| URI       |
+| 2.0       |
+| GULLYBOY  |
+| YATRA     |
++-----------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> select m.mov_id,m.mov_title from movie m join (select sum(b.no_of_seats*s.price) as total,b.mov_id,b.no_of_seats,s.price from booking b left join screen s on b.mov_id=s.mov_id group by b.mov_id order by total desc limit 1) as t on m.mov_id=t.mov_id;
++--------+-----------+
+| mov_id | mov_title |
++--------+-----------+
+|    124 | GULLYBOY  |
++--------+-----------+
+1 row in set (0.02 sec)
+
+
+
+
+
+
