@@ -139,6 +139,9 @@ mysql>  select m.mov_title from movie m right join booking b on m.mov_id=b.mov_i
 4 rows in set (0.00 sec)
 
 
+5.)
+movie with highest collection:
+--------------------------------
 
 mysql> select m.mov_id,m.mov_title from movie m join (select sum(b.no_of_seats*s.price) as total,b.mov_id,b.no_of_seats,s.price from booking b left join screen s on b.mov_id=s.mov_id group by b.mov_id order by total desc limit 1) as t on m.mov_id=t.mov_id;
 +--------+-----------+
