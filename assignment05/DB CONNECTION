@@ -1,0 +1,20 @@
+import mysql.connector as m
+db = m.connect(host="localhost",user="root",password="root",db="joins",port="3306" )
+c = db.cursor(buffered=True)
+fd = open("casequries.sql", 'r')
+
+sqlFile = fd.read()
+ 	
+fd.close()
+sqlCommands = sqlFile.split(';')   
+for command in sqlCommands:
+	try:
+		c.execute(command)
+		for row in c:
+			try:
+				print (row) 
+			except:
+				raise errors.get_exception(packet)
+	except:
+		raise errors.get_exception(packet)
+		
