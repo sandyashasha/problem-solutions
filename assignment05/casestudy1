@@ -1,0 +1,58 @@
+import mysql.connector as m
+import HTML
+import webbrowser 
+def db_connection():
+    db = m.connect(host="localhost",user="root",password="root",db="casestudy",port="3306" )
+    cursor = db.cursor(buffered=True)
+    f = open('q1.sql',"r");
+    fil=f.read()
+    sqlcommands=fil.split(';');
+    #print (sqlcommands)
+    for line in sqlcommands:
+        try:
+            cursor.execute(line)
+            head=[i[0] for i in cursor.description]
+            res=cursor.fetchall()
+            for  r in cursor:
+                try:
+                    print (r)
+                except:
+                    print("Exception Thrown")
+            res.insert(0,head)
+            return res
+        except:
+            print("Exception Thrown")
+    db.close() 
+
+print(db_connection())
+#def htmlconnection():
+    #f = open('html1.html','r')
+    #f.read()
+    #f.close()
+
+    #webbrowser.open_new_tab('html1.html')
+#print(htmlconnection())
+def write_html(message):
+    f = open('helloworld2.html','w')
+    f.write(message)
+    f = open('helloworld2.html','r')
+    f.read()
+    webbrowser.open_new_tab('helloworld2.html')
+    f.close()
+
+
+def tables_html():
+    res=db_connection()
+    table_data = res
+    htmlcode = HTML.table(res)
+    print htmlcode
+    write_html(htmlcode)    
+tables_html() 
+ 
+
+ 
+ 
+
+
+
+ 
